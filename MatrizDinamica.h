@@ -1,86 +1,172 @@
 template <typename T>
 class MatrizDinamica {
-private:
-    T **datos;
-    int filas;
-    int columnas;
 
 public:
 
+    int filas;
+    int columnas;
+    T **datos;
+
     // constructor
-    MatrizDinamica(int filas, int columnas){
+    MatrizDinamica(int a, int b){
 
-        this->filas = filas;
-        this->columnas = columnas;
+        filas = a;
+        columnas = b;
+        datos = nullptr;
 
-        crearMatriz();
+    }
 
+    // Copy constructor
+    MatrizDinamica(const MatrizDinamica& otra) {
+        filas = otra.filas;
+        columnas = otra.columnas;
+        datos = nullptr;
+        if (filas > 0 && columnas > 0) {
+            crearMatriz();
+            for (int i = 0; i < filas; ++i) {
+                for (int j = 0; j < columnas; ++j) {
+                    datos[i][j] = otra.datos[i][j];
+                }
+            }
+        }
+    }
+
+    // Copy assignment operator
+    MatrizDinamica& operator=(const MatrizDinamica& otra) {
+        if (this == &otra) {
+            return *this;
+        }
+
+        if (datos != nullptr) {
+            for (int i = 0; i < filas; i++) {
+                delete[] datos[i];
+            }
+            delete[] datos;
+        }
+
+        filas = otra.filas;
+        columnas = otra.columnas;
+        datos = nullptr;
+
+        if (filas > 0 && columnas > 0) {
+            crearMatriz();
+            for (int i = 0; i < filas; i++) {
+                for (int j = 0; j < columnas; j++) {
+                    datos[i][j] = otra.datos[i][j];
+                }
+            }
+        }
+        return *this;
     }
 
     // metodo que crea la matriz.
     void crearMatriz(){
 
-        datos = new T*[filas]; // creacion de las filas.
+        try{
 
-        // por cada fila crear n columnas.
-        for(int i = 0; i < filas; i++){
+            datos = new T*[filas]; // creacion de las filas.
 
-            datos[i] = new T[columnas];
+            // por cada fila crear n columnas.
+            for(int i = 0; i < filas; i++){
 
-        };
+                datos[i] = new T[columnas];
+
+            };
+
+            // inicializar todos los valores a 0
+            for(int i = 0; i < filas; i++){
+
+                for(int j = 0; j < columnas; j++){
+
+                    datos[i][j] = 0;
+
+                }
+
+            }
+
+        }
+
+        catch(std::exception &e){
+
+            std::cout << e.what() << std::endl;
+            
+        }
 
     }
 
     // metodo que redimensiona la matriz con un nuevo valor.
     void redimensionar(int nuevaF, int nuevaC){
 
-        T **nuevaMat;
+        try{
 
-        nuevaMat = new T*[nuevaF]; // crear el vector de tipo puntero.
+            T **nuevaMat;
 
-        for(int i = 0; i < nuevaF; i++){ // por cada fila asigno el valor de nueva columna.
+            nuevaMat = new T*[nuevaF]; // crear el vector de tipo puntero.
 
-            nuevaMat[i] = new T[nuevaC];
+            for(int i = 0; i < nuevaF; i++){ // por cada fila asigno el valor de nueva columna.
 
-        }
-
-        // copiar todos los elementos de la nueva matriz.
-        for(int i = 0; i < nuevaF; i++){
-
-            for(int j = 0; j < nuevaC; j++){
-
-                nuevaMat[i][j] = datos[i][j]; // no estoy seguro si esta es la forma correcta.
+                nuevaMat[i] = new T[nuevaC];
 
             }
 
+            // copiar todos los elementos de la nueva matriz.
+            for(int i = 0; i < nuevaF; i++){
+
+                for(int j = 0; j < nuevaC; j++){
+
+                    nuevaMat[i][j] = datos[i][j]; // no estoy seguro si esta es la forma correcta.
+
+                }
+
+            }
+
+            datos = nuevaMat; // el puntero doble datos se le asigna 
+
+            for(int i = 0; i < nuevaF; i++){
+
+                delete[] nuevaMat[i];
+
+            }
+
+            delete[] nuevaMat;
+
+            nuevaMat = nullptr;
+
+            filas = nuevaF;
+            columnas = nuevaC;
+
         }
 
-        datos = nuevaMat; // el puntero doble datos se le asigna 
+        catch(std::exception &e){
 
-        for(int i = 0; i < nuevaF; i++){
-
-            delete[] nuevaMat[i];
+            std::cout << e.what() << std::endl;
 
         }
-
-        delete[] nuevaMat;
-
-        nuevaMat = nullptr;
-
 
     }
 
     ~MatrizDinamica(){
 
-        // limpiar toda la matriz
+        try{
 
-        for(int i = 0; i < filas; i++){
+            // limpiar toda la matriz
 
-            delete[] datos[i];
+            for(int i = 0; i < filas; i++){
+
+                delete[] datos[i];
+
+            }
+
+            delete[] datos;
+            datos = nullptr;
 
         }
+        
+        catch(std::exception &e){
 
-        delete[] datos;
+            std::cout << e.what() << std::endl;
+
+        }
 
     }   
 
