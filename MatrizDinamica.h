@@ -70,6 +70,20 @@ public:
 
     }
 
+    ~MatrizDinamica(){
+
+        // limpiar toda la matriz
+
+        for(int i = 0; i < filas; i++){
+
+            delete[] datos[i];
+
+        }
+
+        delete[] datos;
+
+    }   
+
 
 
 
